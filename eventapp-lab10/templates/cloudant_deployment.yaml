@@ -1,15 +1,16 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: "cloudant-pvc-{{ .Values.username }}"
+  name: "cloudant-service-{{ .Values.username }}"
+  labels:
+    billingType: "hourly"
 spec:
   accessModes:
-    - ReadWriteOnce
-  volumeMode: Filesystem
+    - ReadWriteMany
   resources:
     requests:
       storage: 1Gi
-  storageClassName: ""
+  storageClassName: ibmc-file-bronze
 ---
 apiVersion: v1
 kind: Service
@@ -71,3 +72,4 @@ spec:
         - name: "{{ .Values.username }}-pv"
           persistentVolumeClaim:
             claimName: "cloudant-pvc-{{ .Values.username }}"
+
